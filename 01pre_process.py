@@ -22,6 +22,7 @@ dict["CY"] = month_mark_input[:2]
 dict["CM"] = month_mark_input[2:]
 
 with open(json_filename, "w") as f:
+    dict = json.dumps(dict, sort_keys=True, indent=4, separators=(',', ': '))
     json.dump(dict, f)
 
 
