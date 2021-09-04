@@ -3,7 +3,7 @@
 '''
 @Last update:   2021/09/04 15:48:39
 @Author     :   bokep
-@Version    :   0.0.1
+@Version    :   1.0.0
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -14,7 +14,7 @@ import json
 
 
 # 工作表合并函数
-def excel_combination(excel_wb, target_wb, target_sht):
+def excel_combination(excel_wb, target_sht):
     print("<<<<<<<<<<<<<<<<<<<<<<<<<<<正在处理\"%s\"工作簿" % (excel_wb.Name))
     excel_sht_count = excel_wb.Worksheets.Count
     # print(excel_sht_count)
@@ -22,7 +22,7 @@ def excel_combination(excel_wb, target_wb, target_sht):
         excel_sht = excel_wb.Worksheets[n - 1]
         print("<<<<<<<<<<<<<<<<<<正在处理\"%s\"工作表" % (excel_sht.Name))
         limit_column_excel = excel_sht.Range("AB1048576").End(3).row
-        print(limit_column_excel)
+        # print(limit_column_excel)
         # #对工作表进行筛选，方便后续合并
         cell_begin = excel_sht.Cells(1, "U")
         cell_end = excel_sht.Cells(limit_column_excel, "AB")
@@ -37,17 +37,18 @@ def excel_combination(excel_wb, target_wb, target_sht):
         filter_criteria1 = "<>0"
         filter_area.AutoFilter(Field=8, Criteria1=filter_criteria1)
         filter_area.Copy()
-        print(filter_area)
+        # print(filter_area)
 
         # ##需要取到原有最大行数后一行，进行粘贴
         limit_column_target = target_sht.Range("A1048576").End(3).row + 1
-        print(limit_column_target)
+        # print(limit_column_target)
         cell_begin = target_sht.Cells(limit_column_target, "A")
         cell_begin.PasteSpecial(Paste=-4163)
 
         # target_wb.Save()
 
     excel_wb.Save()
+    excel_wb.Close()
 
 
 # 实际程序
@@ -84,14 +85,31 @@ for file in listdir(process_route):
         formula_sn = file[:length]
 
         if formula_sn == "TB" or formula_sn == "ATB":
-            excel_combination(excel_wb, target_sht, target_sht)
+            excel_combination(excel_wb, target_sht)
+            target_wb.Save()
         else:
             pass
 
-        excel_wb.Close()
-
     except Exception:
-        raise
+        # raise
+        pass
+
+# #处理合并工作表
+# ##删除空白首行
+target_sht.Cells(1, "A").EntireRow.Delete()
+limit_column_target = target_sht.Range("A1048576").End(3).row
+cell_begin = target_sht.Cells(1, "A")
+cell_end = target_sht.Cells(limit_column_target, "H")
+filter_area = target_sht.Range(cell_begin, cell_end)
+filter_area.AutoFilter()
+filter_criteria1 = "RMB借正贷负"
+filter_area.AutoFilter(Field=8, Criteria1=filter_criteria1)
+# ##删除重复抬头
+cell_begin = target_sht.Cells(2, "A")
+cell_end = target_sht.Cells(limit_column_target, "H")
+filter_area = target_sht.Range(cell_begin, cell_end)
+filter_area.EntireRow.Delete()
+filter_area.AutoFilter()
 
 target_wb.Save()
 target_wb.Close()
