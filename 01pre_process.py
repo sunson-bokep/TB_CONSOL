@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2021/08/30 15:46:28
+@Last update:   2021/09/04 15:56:21
 @Author     :   bokep
-@Version    :   0.1
+@Version    :   1.0.0
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -22,7 +22,7 @@ dict["CY"] = month_mark_input[:2]
 dict["CM"] = month_mark_input[2:]
 
 with open(json_filename, "w") as f:
-    dict = json.dumps(dict, sort_keys=True, indent=4, separators=(',', ': '))
+    # dict = json.dumps(dict, sort_keys=True, indent=4, separators=(',', ': '))
     json.dump(dict, f)
 
 
@@ -36,7 +36,7 @@ excelapp.Visible = False
 # ##对目标文件夹中的xls文件进行具体操作。
 root_route = getcwd()
 input_route = root_route + "\\01输入文件"
-output_route = root_route + "\\02处理文件"
+output_route = root_route + "\\02处理文件\\TB"
 
 for file in listdir(input_route):
     # print(file[-3:])

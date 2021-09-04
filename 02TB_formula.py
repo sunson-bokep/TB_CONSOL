@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2021/09/01 13:30:55
+@Last update:   2021/09/04 15:48:14
 @Author     :   bokep
-@Version    :   1.0
+@Version    :   1.1.0
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -38,7 +38,7 @@ def excel_formula_input(excel_wb, formula_fn, formula_sn):
         print("<<<<<<<<<<<<<<<<<<正在处理\"%s\"工作表" % (excel_sht.Name))
         limit_column_excel = excel_sht.Range("A1048576").End(3).row
 
-        # ###具体导入操作
+        # ###具体导入公式操作
         for i in range(4, 4 + limit_column_formula):
             # #获取输入模板中的数据
             column_index = formula_sht.Cells(i, "A").value
@@ -71,7 +71,7 @@ excelapp.DisplayAlerts = False
 excelapp.Visible = False
 
 root_route = getcwd()
-process_route = root_route + "\\02处理文件"
+process_route = root_route + "\\02处理文件\\TB"
 
 # #打开需要使用到的工作表，并在使用结束后关闭。
 input_fn1 = root_route + "\\00框架文件\\01Co&FX.xlsx"
@@ -88,7 +88,7 @@ for file in listdir(process_route):
     print(file)
     try:
         # #目标工作簿，输入模板工作簿定义与具体执行。
-        excel_fn = root_route + "\\02处理文件\\" + file
+        excel_fn = root_route + "\\02处理文件\\TB\\" + file
         excel_wb = excelapp.Workbooks.Open(excel_fn)
         length = file.index("#")
         formula_sn = file[:length]
