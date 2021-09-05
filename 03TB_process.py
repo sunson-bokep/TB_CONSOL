@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2021/09/04 15:48:39
+@Last update:   2021/09/05 15:55:02
 @Author     :   bokep
-@Version    :   1.0.0
+@Version    :   1.1.0
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -51,6 +51,53 @@ def excel_combination(excel_wb, target_sht):
     excel_wb.Close()
 
 
+# 设置列宽
+def columns_width(target_sht, column_width, column_begin, column_end=""):
+    '''设置列宽'''
+    if column_end == "":
+        column_end = column_begin
+    else:
+        pass
+
+    column_begin = target_sht.Columns(column_begin)
+    column_end = target_sht.Columns(column_end)
+    set_range = target_sht.Range(column_begin, column_end)
+    set_range.ColumnWidth = column_width
+
+
+# 设置格式
+def columns_format(target_sht, column_format, column_begin, column_end=""):
+    '''设置格式'''
+    if column_end == "":
+        column_end = column_begin
+    else:
+        pass
+
+    column_begin = target_sht.Columns(column_begin)
+    column_end = target_sht.Columns(column_end)
+    set_range = target_sht.Range(column_begin, column_end)
+    set_range.NumberFormatLocal = column_format
+
+
+# 设置筛选
+def columns_autofilter(target_sht, column_begin, column_end=""):
+    '''设置筛选'''
+    if column_end == "":
+        column_end = column_begin
+    else:
+        pass
+
+    if target_sht.AutoFilterMode is True:
+        target_sht.AutoFilter()
+    else:
+        pass
+
+    column_begin = target_sht.Columns(column_begin)
+    column_end = target_sht.Columns(column_end)
+    set_range = target_sht.Range(column_begin, column_end)
+    set_range.AutoFilter()
+
+
 # 实际程序
 excelapp = VBA.Dispatch("Excel.Application")
 
@@ -60,13 +107,13 @@ excelapp.Visible = False
 # #基础信息
 root_route = getcwd()
 process_route = root_route + "\\02处理文件\\TB"
-target_route = root_route + "\\02处理文件"
+target_route = root_route + "\\09完成文件"
 
 json_filename = "date_data.json"
 with open(json_filename, "r") as f:
     dict_data = json.load(f)
 month_mark = "Y" + dict_data["CY"] + "M" + dict_data["CM"]
-target_fn = target_route + "\\CombinedTB" + month_mark + ".xlsx"
+target_fn = target_route + "\\CombinedTB#" + month_mark + ".xlsx"
 
 # #生成TB合并的新文件
 target_wb = excelapp.Workbooks.Add()
@@ -110,6 +157,28 @@ cell_end = target_sht.Cells(limit_column_target, "H")
 filter_area = target_sht.Range(cell_begin, cell_end)
 filter_area.EntireRow.Delete()
 filter_area.AutoFilter()
+target_wb.Save()
+# ##整理格式
+# ###设置列宽
+column_begin = "A"
+column_end = "H"
+column_width = 20
+columns_width(target_sht, column_width, column_begin, column_end)
+
+column_begin = "F"
+column_width = 90
+columns_width(target_sht, column_width, column_begin)
+target_wb.Save()
+# ###设置格式
+column_begin = "G"
+column_end = "H"
+column_format = "#,##0.00_);[红色](#,##0.00)"
+columns_format(target_sht, column_format, column_begin, column_end)
+target_wb.Save()
+# ###设置筛选
+column_begin = "A"
+column_end = "H"
+columns_autofilter(target_sht, column_begin, column_end)
 
 target_wb.Save()
 target_wb.Close()

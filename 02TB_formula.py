@@ -85,7 +85,7 @@ formula_fn = root_route + "\\00框架文件\\04Formula.xlsx"
 
 # #对02文件夹中的文件都进行处理
 for file in listdir(process_route):
-    print(file)
+    # print(file)
     try:
         # #目标工作簿，输入模板工作簿定义与具体执行。
         excel_fn = root_route + "\\02处理文件\\TB\\" + file
@@ -101,9 +101,9 @@ for file in listdir(process_route):
 
             excel_sht = excel_wb.Worksheets[0]
             currency_mark = excel_sht.Cells(10, "AI").value
-            print(currency_mark)
+            # print(currency_mark)
             determine2 = (currency_mark != "RMB")
-            print(determine2)
+            # print(determine2)
 
             if determine1 and determine2:
                 print("<<<<<<<<<对外币报表折算金额进行处理")
