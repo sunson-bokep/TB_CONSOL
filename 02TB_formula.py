@@ -60,6 +60,9 @@ def excel_formula_input(excel_wb, formula_fn, formula_sn):
             cell_end = excel_sht.Cells(limit_column_excel, column_index)
             excel_sht.Range(cell_begin, cell_end).formulaR1C1 = formula_id
 
+        excel_wb.Save()
+        print("处理完成！")
+
     excel_wb.Save()
     formula_wb.Close()
 
@@ -86,14 +89,18 @@ formula_fn = root_route + "\\00框架文件\\04Formula.xlsx"
 # #对02文件夹中的文件都进行处理
 for file in listdir(process_route):
     # print(file)
-    try:
+    try:    # #文件夹下有非xlsx的文件，用try可以避免出错。
         # #目标工作簿，输入模板工作簿定义与具体执行。
         excel_fn = root_route + "\\02处理文件\\TB\\" + file
         excel_wb = excelapp.Workbooks.Open(excel_fn)
         length = file.index("#")
         formula_sn = file[:length]
         if formula_sn == "TB" or formula_sn == "ATB":
-            excel_formula_input(excel_wb, formula_fn, formula_sn)
+
+            try:
+                excel_formula_input(excel_wb, formula_fn, formula_sn)
+            except Exception:
+                print("请确认公式全部准确！")
 
             # #为了计算非人民币公司的外币报表折算差额，单独写特例。
             determine1 = (formula_sn == "TB")
@@ -129,6 +136,7 @@ for file in listdir(process_route):
                     .formulaR1C1 = fa
 
                 excel_wb.Save()
+                print("处理完成！")
             else:
                 pass
         else:

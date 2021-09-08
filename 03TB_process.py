@@ -36,6 +36,8 @@ def excel_combination(excel_wb, target_sht):
 
         filter_criteria1 = "<>0"
         filter_area.AutoFilter(Field=8, Criteria1=filter_criteria1)
+        # ###部分抵消项需要剔除，报表科目匹配结果为0
+        filter_area.AutoFilter(Field=4, Criteria1=filter_criteria1)
         filter_area.Copy()
         # print(filter_area)
 
