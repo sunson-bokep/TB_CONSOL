@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2021/09/15 15:17:53
+@Last update:   2021/09/15 17:35:24
 @Author     :   bokep
-@Version    :   1.0.0
+@Version    :   1.0.1
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -62,9 +62,14 @@ def filter_conditions(
     column_begin = target_sht.Columns(column_begin)
     column_end = target_sht.Columns(column_end)
     set_range = target_sht.Range(column_begin, column_end)
+    criteria1 = filter_criteria[0]
+    criteria2 = filter_criteria[1]
     set_range.AutoFilter(
         Field=filter_column_no,
-        Criteria1=filter_criteria)
+        Criteria1=criteria1,
+        Operator=1,
+        Criteria2=criteria2)
+    # Const xlAnd = 1
 
 
 # 区域复制
@@ -270,7 +275,7 @@ for file in listdir(process_route):
             # source_wb.Save()      # 测试用
 
             # ###筛选非空值
-            filter_criteria = "<>"      # 非空筛选
+            filter_criteria = ["<>", "<>0"]      # 非空及非零筛选
             # print(sht[2])
             filter_conditions(
                 source_sht, sht[2], filter_criteria,
