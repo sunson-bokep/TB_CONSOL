@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2021/09/08 18:14:46
+@Last update:   2021/09/15 15:16:34
 @Author     :   bokep
-@Version    :   1.1.1
+@Version    :   1.1.2
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -132,6 +132,11 @@ for file in listdir(process_route):
 
                 fa = "=ROUND(-SUM(R2C:R[-1]C),2)"
                 cell = excel_sht.Cells(limit_column_excel, "AO")
+                excel_sht.Range(cell, cell)\
+                    .formulaR1C1 = fa
+
+                fa = "=-SUMIF(C[4],\"本年利润抵消明细\",C)"
+                cell = excel_sht.Cells(limit_column_excel, "AA")
                 excel_sht.Range(cell, cell)\
                     .formulaR1C1 = fa
 

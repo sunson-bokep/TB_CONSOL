@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2021/09/09 15:57:36
+@Last update:   2021/09/15 15:17:16
 @Author     :   bokep
-@Version    :   1.1.2
+@Version    :   1.1.3
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -89,7 +89,7 @@ def columns_autofilter(target_sht, column_begin, column_end=""):
         pass
 
     if target_sht.AutoFilterMode is True:
-        target_sht.AutoFilter()
+        target_sht.Range("A1").AutoFilter()
     else:
         pass
 
