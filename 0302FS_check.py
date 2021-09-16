@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2021/09/15 17:35:24
+@Last update:   2021/09/16 13:47:50
 @Author     :   bokep
-@Version    :   1.0.1
+@Version    :   1.0.2
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -359,6 +359,11 @@ target_wb.Save()
 
 # ##设置筛选
 columns_autofilter(target_sht_final, "A", "F")
+target_wb.Save()
+
+# ##设置冻结
+target_sht_final.Cells(2, "F").Select()
+excelapp.ActiveWindow.FreezePanes = True
 target_wb.Save()
 
 target_wb.Close()

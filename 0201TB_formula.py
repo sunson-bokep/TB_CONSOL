@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2021/09/15 15:16:34
+@Last update:   2021/09/16 16:30:13
 @Author     :   bokep
-@Version    :   1.1.2
+@Version    :   1.1.3
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -135,10 +135,11 @@ for file in listdir(process_route):
                 excel_sht.Range(cell, cell)\
                     .formulaR1C1 = fa
 
-                fa = "=-SUMIF(C[4],\"本年利润抵消明细\",C)"
-                cell = excel_sht.Cells(limit_column_excel, "AA")
-                excel_sht.Range(cell, cell)\
-                    .formulaR1C1 = fa
+                # #可以直接取数
+                # fa = "=-SUMIF(C[4],\"本年利润抵消明细\",C)"
+                # cell = excel_sht.Cells(limit_column_excel, "AA")
+                # excel_sht.Range(cell, cell)\
+                #     .formulaR1C1 = fa
 
                 excel_wb.Save()
                 print("处理完成！")
