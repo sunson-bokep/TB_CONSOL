@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2021/09/16 16:30:51
+@Last update:   2021/09/17 10:50:20
 @Author     :   bokep
-@Version    :   1.0.0
+@Version    :   1.0.1
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -55,7 +55,7 @@ mapping_fn = mapping_route + "\\05A3.xlsx"
 target_wb = excelapp.Workbooks.Open(target_fn)
 # #激活被复制的工作表
 mapping_wb = excelapp.Workbooks.Open(mapping_fn)
-mapping_sht = mapping_wb.Worksheets["A3"]
+mapping_sht = mapping_wb.Worksheets[0]
 
 # #复制工作表至首个
 sht_copy_to_first(mapping_sht, target_wb)
