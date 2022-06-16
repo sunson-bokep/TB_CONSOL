@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2021/09/17 10:50:20
+@Last update:   2022/06/08 11:10:26
 @Author     :   bokep
-@Version    :   1.0.1
+@Version    :   1.1.0
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -14,14 +14,26 @@ import win32com.client as VBA
 
 
 # 复制工作表至首个
-def sht_copy_to_first(source_sht, target_wb):
+def ws_copy_to_first(source_sht, target_wb, ws_numbers=1):
     # #也删除同名的工作表，以防出错。
-    sht_name = source_sht.Name
-    try:
-        target_wb.Worksheets[sht_name].Delete()
-        print("<<<<<原已有同名工作表，已进行删除！")
-    except Exception:
-        pass
+    if ws_numbers == 1:
+        sht_name = source_sht.Name
+        try:
+            target_wb.Worksheets[sht_name].Delete()
+            print("<<<<<原已有同名工作表，已进行删除！")
+        except Exception:
+            pass
+        # source_sht.Copy(Before=target_wb.Worksheets[0])
+        # target_wb.Save()
+    else:
+        for count in range(0, ws_numbers):
+            sht_name = source_sht[count].Name
+            try:
+                target_wb.Worksheets[sht_name].Delete()
+                print(f"<<<<<原已有同名工作表{sht_name}，已进行删除！")
+            except Exception:
+                pass
+
     source_sht.Copy(Before=target_wb.Worksheets[0])
     target_wb.Save()
 
@@ -55,10 +67,22 @@ mapping_fn = mapping_route + "\\05A3.xlsx"
 target_wb = excelapp.Workbooks.Open(target_fn)
 # #激活被复制的工作表
 mapping_wb = excelapp.Workbooks.Open(mapping_fn)
-mapping_sht = mapping_wb.Worksheets[0]
+ws_numbers = mapping_wb.Worksheets.Count
+arr = []
+for count in range(0, ws_numbers):
+    ws_name = mapping_wb.Worksheets[count].Name
+    arr.append(ws_name)
 
-# #复制工作表至首个
-sht_copy_to_first(mapping_sht, target_wb)
+# print(arr)
+# arr, ws_numbers = [0], 1
+try:
+    mapping_ws = mapping_wb.Worksheets(arr)
+except Exception:
+    mapping_ws = mapping_wb.Worksheets[0]
+# print(mapping_ws[0].Name)
+
+# #复制工作表至新工作表
+ws_copy_to_first(mapping_ws, target_wb, ws_numbers)
 
 # #替换链接
 source_fn = mapping_route + "\\待替换.xlsx"
