@@ -150,6 +150,8 @@ target_wb = excelapp.Workbooks.Add()
 target_wb.SaveAs(Filename=target_fn, FileFormat=51)
 target_sht = target_wb.Worksheets[0]
 target_sht.Name = "CombinedTB"
+target_ws2 = target_wb.Worksheets.Add()
+target_ws2.Name = "GRIR"
 target_wb.Save()
 
 for file in listdir(process_route):
@@ -164,8 +166,10 @@ for file in listdir(process_route):
         if formula_sn == "TB" or formula_sn == "ATB":
             excel_combination(excel_wb, target_sht)
             target_wb.Save()
+        elif formula_sn == "GRIR":
+            excel_combination(excel_wb, target_ws2)
         else:
-            pass
+            excel_wb.Close()  # 如果不是则对文件进行直接关闭，否则后续冻结操作会报错
 
     except Exception:
         # raise
@@ -225,6 +229,62 @@ if limit_column_target > 1:
     target_sht.Range(column_begin, column_end).Group()
     target_wb.Save()
 
+else:
+    pass    # #如果无数据，行数统计为1，会自动跳过上述处理。
+
+# #处理GRIR工作表
+# ##删除空白首行
+target_ws2.Cells(1, "A").EntireRow.Delete()
+limit_column_target = target_ws2.Range("A1048576").End(3).row
+# print(limit_column_target)
+cell_begin = target_ws2.Cells(1, "A")
+target_ws2.Cells(1, "I").value = "筛选列"
+cell_end = target_ws2.Cells(limit_column_target, "I")
+filter_area = target_ws2.Range(cell_begin, cell_end)
+if limit_column_target > 1:
+    filter_area.AutoFilter()
+    filter_criteria1 = "RMB借正贷负"
+    filter_area.AutoFilter(Field=8, Criteria1=filter_criteria1)
+    # ##删除重复抬头
+    cell_begin = target_ws2.Cells(2, "A")
+    cell_end = target_ws2.Cells(limit_column_target, "I")
+    filter_area = target_ws2.Range(cell_begin, cell_end)
+    filter_area.EntireRow.Delete()
+    filter_area.AutoFilter()
+    target_wb.Save()
+    # ##整理格式
+    # ###删除多余列
+    target_ws2.Columns("G").Delete()
+    target_ws2.Columns("B:E").Delete()
+    # ###设置列宽
+    column_begin = "A"
+    column_end = "C"
+    column_width = 20
+    columns_width(target_ws2, column_width, column_begin, column_end)
+    column_begin = "B"
+    column_width = 90
+    columns_width(target_ws2, column_width, column_begin)
+    target_wb.Save()
+    # ###设置格式
+    column_begin = "C"
+    column_end = "C"
+    column_format = "#,##0.00_);[红色](#,##0.00)"
+    columns_format(target_ws2, column_format, column_begin, column_end)
+    target_wb.Save()
+    # ###设置筛选
+    column_begin = "A"
+    column_end = "C"
+    columns_autofilter(target_ws2, column_begin, column_end)
+    target_wb.Save()
+    # ###设置冻结
+    target_ws2.Activate()
+    target_ws2.Cells(2, "A").Select()
+    excelapp.ActiveWindow.FreezePanes = True
+    target_wb.Save()
+    # ###设置排序/先按公司后按科目排序（程序倒序）
+    columns_sort(target_ws2, 2)
+    columns_sort(target_ws2, 1)
+    target_wb.Save()
 else:
     pass    # #如果无数据，行数统计为1，会自动跳过上述处理。
 

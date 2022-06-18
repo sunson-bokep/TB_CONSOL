@@ -161,24 +161,88 @@ process_area.AutoFilter(Field=8)
 
 target_wb.Save()
 print(">>>>>>>>>>已补充调整分录涉及的唯一识别码信息。")
-# 导入公式
+
+# 筛选不存在的唯一识别码复制到TB（GRIR）
+filter_ws = target_wb.Worksheets["GRIR"]
+max_row_number = filter_ws.Range("A1048576").End(3).row
+cell_begin = filter_ws.Cells(1, "A")
+cell_end = filter_ws.Cells(max_row_number, "D")
+process_area = filter_ws.Range(cell_begin, cell_end)
+filter_criteria1 = "=#N/A"
+process_area.AutoFilter()
+process_area.AutoFilter()
+process_area.AutoFilter(Field=4, Criteria1=filter_criteria1)
+target_wb.Save()
+
+tb_ws = target_wb.Worksheets["CombinedTB"]
+tb_max_row_number = tb_ws.Range("A1048576").End(3).row
+
+# #复制公司简称
+cell_begin = filter_ws.Cells(1, "A")
+cell_end = filter_ws.Cells(max_row_number, "A")
+copy_area = filter_ws.Range(cell_begin, cell_end)
+paste_begin = tb_ws.Cells(tb_max_row_number + 1, "A")
+copy_area.Copy()
+paste_begin.PasteSpecial(Paste=-4163)
+# #复制科目（都是应付账款）
+cell_begin = filter_ws.Cells(1, "E")
+cell_end = filter_ws.Cells(max_row_number, "E")
+copy_area = filter_ws.Range(cell_begin, cell_end)
+paste_begin = tb_ws.Cells(tb_max_row_number + 1, "E")
+copy_area.Copy()
+paste_begin.PasteSpecial(Paste=-4163)
+# #复制唯一识别码
+cell_begin = filter_ws.Cells(1, "B")
+cell_end = filter_ws.Cells(max_row_number, "B")
+copy_area = filter_ws.Range(cell_begin, cell_end)
+paste_begin = tb_ws.Cells(tb_max_row_number + 1, "F")
+copy_area.Copy()
+paste_begin.PasteSpecial(Paste=-4163)
+# #去除筛选
+process_area.AutoFilter(Field=4)
+
+target_wb.Save()
+print(">>>>>>>>>>已补充应付暂估明细。")
+
+# 重新导入公式
 ws_formula_input(target_wb, template_fn, "#" + month_mark)
 
 # ##整理格式
 # ###设置列宽
 column_begin = "I"
-column_end = "J"
+column_end = "O"
 column_width = 20
 columns_width(tb_ws, column_width, column_begin, column_end)
 # ###设置格式
-column_begin = "I"
-column_end = "J"
 column_format = "#,##0.00_);[红色](#,##0.00)"
 columns_format(tb_ws, column_format, column_begin, column_end)
 
 target_wb.Save()
 print(">>>>>>>>>>格式设置完成。")
 print(">>>>>>>>>>调整过入完成。")
+
+# 预付重分类
+tb_max_row_number = tb_ws.Range("A1048576").End(3).row
+cell_begin = tb_ws.Cells(1, "A")
+cell_end = tb_ws.Cells(tb_max_row_number, "O")
+process_area = tb_ws.Range(cell_begin, cell_end)
+process_area.AutoFilter()
+process_area.AutoFilter()
+
+filter_criteria1 = "=预付账款"
+process_area.AutoFilter(Field=5, Criteria1=filter_criteria1)
+filter_criteria1 = "<0"
+process_area.AutoFilter(Field=15, Criteria1=filter_criteria1)
+
+cell_begin = tb_ws.Cells(2, "E")
+cell_end = tb_ws.Cells(tb_max_row_number, "E")
+copy_area = tb_ws.Range(cell_begin, cell_end)
+copy_area.FormulaR1C1 = "应付账款"
+process_area.AutoFilter(Field=15)
+process_area.AutoFilter(Field=5)
+
+target_wb.Save()
+print(">>>>>>>>>>重分类已完成。")
 
 target_wb.Close()
 

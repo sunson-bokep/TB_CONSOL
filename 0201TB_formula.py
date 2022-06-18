@@ -145,6 +145,30 @@ for file in listdir(process_route):
                 print("处理完成！")
             else:
                 pass
+        elif formula_sn == "GRIR":  # 对应付暂估表格进行处理
+            try:
+                excel_formula_input(excel_wb, formula_fn, formula_sn)
+            except Exception:
+                print("请确认公式全部准确！")
+
+            # 修改最后一行的公式
+            excel_sht_count = excel_wb.Worksheets.Count
+            # ##对每张工作表都进行处理
+            for n in range(1, excel_sht_count + 1):
+                excel_sht = excel_wb.Worksheets[n - 1]
+                limit_column_excel = excel_sht.Range("A1048576").End(3).row - 2
+                # 倒数第三行是合计列
+                # ###修改1
+                excel_sht.Cells(limit_column_excel, "AG").value = \
+                    "\\220202\\应付账款\\应付账款-暂估"
+                # ###修改2
+                excel_sht.Cells(limit_column_excel, "AB").formulaR1C1 = \
+                    "=-SUM(R1C:R[-1]C)"
+                # ###修改3
+                excel_sht.Cells(limit_column_excel, "A").value = \
+                    ""
+            print("<<<<<<<<<<已修改所有页面最后行内容。")
+            excel_wb.Save()
         else:
             pass
 

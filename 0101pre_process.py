@@ -48,6 +48,7 @@ for file in listdir(output_route):
 
 if len(month_mark_input) == 4:
     input("请确认已更新框架文件中的当月汇率...")
+    input("请确认已更新期末审计调整...")
 else:
     print("请确认输入的月份信息是否准确！")
     excelapp.Quit()

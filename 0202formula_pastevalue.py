@@ -44,10 +44,13 @@ for file in listdir(input_route):
         # 找出全部链接并切断
         connections_excel = wb.LinkSources(Type=1)
         # Const xlLinkTypeExcelLinks = 1
-        # print(connection_excel)
-        for detail_connection in connections_excel:
-            wb.BreakLink(Name=detail_connection, Type=1)
-            # Const xlExcelLinks = 1
+        # print(connections_excel)
+        if connections_excel is None:
+            pass
+        else:
+            for detail_connection in connections_excel:
+                wb.BreakLink(Name=detail_connection, Type=1)
+                # Const xlExcelLinks = 1
 
         wb.Save()
         wb.Close()
