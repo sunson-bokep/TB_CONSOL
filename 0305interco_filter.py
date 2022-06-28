@@ -183,6 +183,24 @@ if connections_excel is None:
 else:
     for detail_connection in connections_excel:
         target_wb.BreakLink(Name=detail_connection, Type=1)
+target_wb.Save()
+
+# #特殊逻辑-补入轧差
+max_row_number = input_ws.Cells(1048576, "F").End(3).row
+if input_ws.Cells(max_row_number, "F").value == "00 合并\\其他应付款\\关联方往来轧差":
+    pass
+else:
+    input_ws.Cells(max_row_number + 1, "E").value = "其他应付款"
+    input_ws.Cells(max_row_number + 1, "F").value = "00 合并\\其他应付款\\关联方往来轧差"
+    input_ws.Cells(max_row_number + 1, "N").formulaR1C1 = \
+        "=-SUMIF(RPT!C1,CombinedTB!RC6,RPT!C12)"
+    input_ws.Cells(max_row_number + 1, "O").formulaR1C1 = \
+        "=SUM(RC[-3]:RC[-1])"
+
+max_row_number = output_ws.Cells(1048576, "A").End(3).row
+output_ws.Cells(max_row_number + 1, "A").value = "00 合并\\其他应付款\\关联方往来轧差"
+output_ws.Cells(max_row_number + 1, "L").formulaR1C1 = "=-SUM(R2C:R[-1]C)"
+print("<<<<<特殊处理完成。")
 
 target_wb.Save()
 target_wb.Close()
