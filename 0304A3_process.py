@@ -210,7 +210,7 @@ ws_formula_input(target_wb, template_fn, "#" + month_mark)
 # ##整理格式
 # ###设置列宽
 column_begin = "I"
-column_end = "O"
+column_end = "P"
 column_width = 20
 columns_width(tb_ws, column_width, column_begin, column_end)
 # ###设置格式
@@ -224,7 +224,8 @@ print(">>>>>>>>>>调整过入完成。")
 # 预付重分类
 tb_max_row_number = tb_ws.Range("A1048576").End(3).row
 cell_begin = tb_ws.Cells(1, "A")
-cell_end = tb_ws.Cells(tb_max_row_number, "O")
+tb_max_column_number = tb_ws.Range("XFD1").End(-4159).column
+cell_end = tb_ws.Cells(tb_max_row_number, tb_max_column_number)
 process_area = tb_ws.Range(cell_begin, cell_end)
 process_area.AutoFilter()
 process_area.AutoFilter()
@@ -232,7 +233,7 @@ process_area.AutoFilter()
 filter_criteria1 = "=预付账款"
 process_area.AutoFilter(Field=5, Criteria1=filter_criteria1)
 filter_criteria1 = "<0"
-process_area.AutoFilter(Field=15, Criteria1=filter_criteria1)
+process_area.AutoFilter(Field=tb_max_column_number, Criteria1=filter_criteria1)
 
 cell_begin = tb_ws.Cells(2, "E")
 cell_end = tb_ws.Cells(tb_max_row_number, "E")

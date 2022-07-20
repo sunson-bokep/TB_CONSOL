@@ -194,8 +194,8 @@ else:
     input_ws.Cells(max_row_number + 1, "F").value = "00 合并\\其他应付款\\关联方往来轧差"
     input_ws.Cells(max_row_number + 1, "N").formulaR1C1 = \
         "=-SUMIF(RPT!C1,CombinedTB!RC6,RPT!C12)"
-    input_ws.Cells(max_row_number + 1, "O").formulaR1C1 = \
-        "=SUM(RC[-3]:RC[-1])"
+    input_ws.Cells(max_row_number + 1, "P").formulaR1C1 = \
+        "=SUM(RC[-4]:RC[-1])"
 
 max_row_number = output_ws.Cells(1048576, "A").End(3).row
 output_ws.Cells(max_row_number + 1, "A").value = "00 合并\\其他应付款\\关联方往来轧差"
