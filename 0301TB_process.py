@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2021/09/15 15:17:16
+@Last update:   2023/04/07 16:04:15
 @Author     :   bokep
-@Version    :   1.1.3
+@Version    :   1.1.4
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -231,7 +231,7 @@ if limit_column_target > 1:
 
 else:
     pass    # #如果无数据，行数统计为1，会自动跳过上述处理。
-
+# input("pause")  #用于找错
 # #处理GRIR工作表
 # ##删除空白首行
 target_ws2.Cells(1, "A").EntireRow.Delete()
@@ -246,10 +246,17 @@ if limit_column_target > 1:
     filter_criteria1 = "RMB借正贷负"
     filter_area.AutoFilter(Field=8, Criteria1=filter_criteria1)
     # ##删除重复抬头
-    cell_begin = target_ws2.Cells(2, "A")
-    cell_end = target_ws2.Cells(limit_column_target, "I")
-    filter_area = target_ws2.Range(cell_begin, cell_end)
-    filter_area.EntireRow.Delete()
+    # ###先统计筛选后剩余行数（如果只有一家有GRIR，理论上筛选后剩余1行，直接删除会出错）
+    zero_line_check = target_ws2.Range("A1048576").End(3).row
+    # print(zero_line_check)
+    if zero_line_check == 1:
+        pass
+    else:
+        cell_begin = target_ws2.Cells(2, "A")
+        cell_end = target_ws2.Cells(limit_column_target, "I")
+        filter_area = target_ws2.Range(cell_begin, cell_end)
+        filter_area.EntireRow.Delete()
+
     filter_area.AutoFilter()
     target_wb.Save()
     # ##整理格式

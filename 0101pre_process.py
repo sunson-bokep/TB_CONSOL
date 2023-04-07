@@ -9,11 +9,43 @@
 
 # 库导入
 import json
+import datetime
 from os import getcwd, listdir, path, remove, _exit
 import win32com.client as VBA
 
+
+# 导入程序
+# #计算上一个月的标号
+def prior_mark(current_input, lag_month):
+    last_month_Y = int(current_input[:2])
+    last_month_M = int(current_input[2:]) - int(lag_month)
+    if last_month_M < 1:
+        last_month_Y -= 1
+        last_month_M += 12
+
+    last_month_Y = str(last_month_Y).rjust(2, '0')
+    last_month_M = str(last_month_M).rjust(2, '0')
+    # #rjust可以用指定字符填充字符串至指定长度
+
+    return(last_month_Y, last_month_M)
+
+
+# 处理月份信息
+current_date = datetime.datetime.today()
+current_year = current_date.year
+current_month = current_date.month
+# current_year, current_month = 2022, 1  #跨期测试用
+
+current_input = str(current_year)[2:] + str(current_month).rjust(2, '0')
+# print(current_input)
+last_month_Y, last_month_M = prior_mark(current_input, 1)
+last_month_M = int(last_month_M)
+
 # #需外部输入处理数据的年月，方便后续核验和数据处理
-month_mark_input = input("请输入处理月份信息：（例：2021年6月输入值为2106）")
+month_mark_input = input(f"请输入处理月份信息：\
+（例：20{last_month_Y}年{last_month_M}月输入值为\
+{last_month_Y}{str(last_month_M).rjust(2, '0')}）")
+
 month_mark = "Y" + month_mark_input[:2] + "M" + month_mark_input[2:]
 json_filename = "date_data.json"
 
