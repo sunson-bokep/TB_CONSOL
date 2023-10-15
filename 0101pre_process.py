@@ -27,7 +27,7 @@ def prior_mark(current_input, lag_month):
     last_month_M = str(last_month_M).rjust(2, '0')
     # #rjust可以用指定字符填充字符串至指定长度
 
-    return(last_month_Y, last_month_M)
+    return (last_month_Y, last_month_M)
 
 
 # 处理月份信息

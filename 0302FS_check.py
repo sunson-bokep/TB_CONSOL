@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2021/09/16 13:47:50
+@Last update:   2023/10/15 17:41:07
 @Author     :   bokep
-@Version    :   1.0.2
+@Version    :   1.0.3
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -237,6 +237,27 @@ for file in listdir(process_route):
 
         company_name = file_name[3:-7]
         # print(company_name)
+
+        # #统一工作簿名称
+        ws_num = source_wb.Worksheets.Count
+        # print(ws_num)
+        ws_num = int(ws_num)
+
+        for n in range(0, ws_num):
+            # print(n)
+            ws = source_wb.Worksheets[n]
+            print(f"工作表名称：{ws.Cells(1, 1)}..")
+
+            if ws.Cells(1, 1).Value == "资产负债表":
+                ws.Name = "BS"
+                # print(ws.Name)
+            elif ws.Cells(1, 1).Value == "利  润  表":
+                ws.Name = "PL"
+                # print(ws.Name)
+            else:
+                print("需确认工作表抬头！")
+
+        source_wb.Save()
 
         sht_pool = [["BS", "A", 3, "A", "C"],
                     ["BS", "B", 3, "E", "G"],
