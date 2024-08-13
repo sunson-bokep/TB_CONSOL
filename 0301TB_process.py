@@ -241,7 +241,10 @@ cell_begin = target_ws2.Cells(1, "A")
 target_ws2.Cells(1, "I").value = "筛选列"
 cell_end = target_ws2.Cells(limit_column_target, "I")
 filter_area = target_ws2.Range(cell_begin, cell_end)
-if limit_column_target > 1:
+if limit_column_target > 5:
+    # 根据测试，如果有1条数据（则必另有合计行），则数值为6,
+    # 根据上述规律，数值小于6时，说明数据集为空，可以跳过
+    print(limit_column_target)
     filter_area.AutoFilter()
     filter_criteria1 = "RMB借正贷负"
     filter_area.AutoFilter(Field=8, Criteria1=filter_criteria1)
@@ -293,7 +296,7 @@ if limit_column_target > 1:
     columns_sort(target_ws2, 1)
     target_wb.Save()
 else:
-    pass    # #如果无数据，行数统计为1，会自动跳过上述处理。
+    pass    # #如果数值偏小，会自动跳过上述处理。
 
 target_wb.Close()
 

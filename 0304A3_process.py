@@ -234,16 +234,21 @@ filter_criteria1 = "=预付账款"
 process_area.AutoFilter(Field=5, Criteria1=filter_criteria1)
 filter_criteria1 = "<0"
 process_area.AutoFilter(Field=tb_max_column_number, Criteria1=filter_criteria1)
-
-cell_begin = tb_ws.Cells(2, "E")
-cell_end = tb_ws.Cells(tb_max_row_number, "E")
-copy_area = tb_ws.Range(cell_begin, cell_end)
-copy_area.FormulaR1C1 = "应付账款"
+tb_max_row_number_check = tb_ws.Range("A1048576").End(3).row
+# print(tb_max_row_number_check)
+if tb_max_row_number_check == 1:
+    print(">>>>>>>>>>无需操作重分类。")
+    # 如果数值为1，说明筛选后，只剩标题行，剩余项为零。
+else:
+    cell_begin = tb_ws.Cells(2, "E")
+    cell_end = tb_ws.Cells(tb_max_row_number, "E")
+    copy_area = tb_ws.Range(cell_begin, cell_end)
+    copy_area.FormulaR1C1 = "应付账款"
+    print(">>>>>>>>>>重分类已完成。")
 process_area.AutoFilter(Field=15)
 process_area.AutoFilter(Field=5)
 
 target_wb.Save()
-print(">>>>>>>>>>重分类已完成。")
 
 target_wb.Close()
 
