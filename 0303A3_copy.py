@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2022/06/08 11:10:26
+@Last update:   2024/10/14 17:35:14
 @Author     :   bokep
-@Version    :   1.1.0
+@Version    :   1.1.1
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -85,7 +85,7 @@ except Exception:
 ws_copy_to_first(mapping_ws, target_wb, ws_numbers)
 
 # #替换链接
-source_fn = mapping_route + "\\待替换.xlsx"
+source_fn = "D:\\Python\\CONSOLAUTO\\Github\\TB_CONSOL\\00框架文件\\待替换.xlsx"
 link_replace(target_wb, source_fn, target_fn)
 
 print(">>>>>已生成本期A3！")

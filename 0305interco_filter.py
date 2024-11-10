@@ -203,6 +203,11 @@ output_ws.Cells(max_row_number + 1, "L").formulaR1C1 = "=-SUM(R2C:R[-1]C)"
 print("<<<<<特殊处理完成。")
 
 target_wb.Save()
+
+# #最后在CombinedTB页加筛选
+input_ws.Cells(1, "F").AutoFilter()
+target_wb.Save()
+
 target_wb.Close()
 
 excelapp.Quit()

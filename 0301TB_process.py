@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2023/04/07 16:04:15
+@Last update:   2024/10/14 17:34:59
 @Author     :   bokep
-@Version    :   1.1.4
+@Version    :   1.1.5
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -236,15 +236,16 @@ else:
 # ##删除空白首行
 target_ws2.Cells(1, "A").EntireRow.Delete()
 limit_column_target = target_ws2.Range("A1048576").End(3).row
-# print(limit_column_target)
+print(f"暂估共有行数：{limit_column_target}")
 cell_begin = target_ws2.Cells(1, "A")
 target_ws2.Cells(1, "I").value = "筛选列"
 cell_end = target_ws2.Cells(limit_column_target, "I")
 filter_area = target_ws2.Range(cell_begin, cell_end)
-if limit_column_target > 5:
-    # 根据测试，如果有1条数据（则必另有合计行），则数值为6,
-    # 根据上述规律，数值小于6时，说明数据集为空，可以跳过
-    print(limit_column_target)
+target_wb.Save()
+if limit_column_target > 2:
+    # 根据测试，如果有1条数据（则必另有合计行），则数值为3,
+    # 根据上述规律，数值小于3时，说明数据集为空，可以跳过
+    # print(limit_column_target)
     filter_area.AutoFilter()
     filter_criteria1 = "RMB借正贷负"
     filter_area.AutoFilter(Field=8, Criteria1=filter_criteria1)

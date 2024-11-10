@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2021/09/16 16:30:13
+@Last update:   2024/10/14 17:34:06
 @Author     :   bokep
-@Version    :   1.1.3
+@Version    :   1.1.4
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -87,14 +87,18 @@ input_fn3_wb = excelapp.Workbooks.Open(input_fn3)
 formula_fn = root_route + "\\00框架文件\\04Formula.xlsx"
 
 # #对02文件夹中的文件都进行处理
+full_list = ["ATB", "TB", "GRIR"]
 for file in listdir(process_route):
-    # print(file)
+    # print(file, full_list)
     try:    # #文件夹下有非xlsx的文件，用try可以避免出错。
         # #目标工作簿，输入模板工作簿定义与具体执行。
         excel_fn = root_route + "\\02处理文件\\TB\\" + file
         excel_wb = excelapp.Workbooks.Open(excel_fn)
         length = file.index("#")
         formula_sn = file[:length]
+        full_list.remove(formula_sn)
+        # print(full_list)
+
         if formula_sn == "TB" or formula_sn == "ATB":
 
             try:
@@ -157,7 +161,7 @@ for file in listdir(process_route):
             for n in range(1, excel_sht_count + 1):
                 excel_sht = excel_wb.Worksheets[n - 1]
                 limit_column_excel = excel_sht.Range("A1048576").End(3).row - 2
-                # 倒数第三行是合计列
+                # 倒数第三行是合计列，特殊规则
                 # ###修改1
                 excel_sht.Cells(limit_column_excel, "AG").value = \
                     "\\220202\\应付账款\\应付账款-暂估"
@@ -176,6 +180,11 @@ for file in listdir(process_route):
 
     except Exception:
         pass
+
+if len(full_list) == 0:
+    pass
+else:
+    print(f">>>>>>>>>缺少以下【当月】文件：{full_list}！！！")
 
 input_fn1_wb.Close()
 input_fn2_wb.Close()
