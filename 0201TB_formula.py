@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2024/10/14 17:34:06
+@Last update:   2024/12/03 16:51:58
 @Author     :   bokep
-@Version    :   1.1.4
+@Version    :   1.1.5
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -76,15 +76,39 @@ excelapp.Visible = False
 root_route = getcwd()
 process_route = root_route + "\\02处理文件\\TB"
 
+SR_choice = 9
+while True:
+    SR_choice = input("请输入费用处理模式：\n选1:分部门明细\n选2：按科目汇总\n")
+    # ##需要让程序识别输入的是数字格式
+    try:
+        SR_choice = int(SR_choice)
+    except Exception:
+        SR_choice = 9
+
+    if SR_choice == 1:
+        break
+    elif SR_choice == 2:
+        break
+    else:
+        print("输入值非法！请输入1或者2！")
+
 # #打开需要使用到的工作表，并在使用结束后关闭。
 input_fn1 = root_route + "\\00框架文件\\01Co&FX.xlsx"
-input_fn2 = root_route + "\\00框架文件\\02SR.xlsx"
+input_fn2_c1 = root_route + "\\00框架文件\\02SR_费用分部门.xlsx"
+input_fn2_c2 = root_route + "\\00框架文件\\02SR.xlsx"
 input_fn3 = root_route + "\\00框架文件\\03MR.xlsx"
 input_fn1_wb = excelapp.Workbooks.Open(input_fn1)
-input_fn2_wb = excelapp.Workbooks.Open(input_fn2)
 input_fn3_wb = excelapp.Workbooks.Open(input_fn3)
+formula_fn_c1 = root_route + "\\00框架文件\\04Formula_费用分部门.xlsx"
+formula_fn_c2 = root_route + "\\00框架文件\\04Formula.xlsx"
 
-formula_fn = root_route + "\\00框架文件\\04Formula.xlsx"
+# ##根据手动选择情况，使用不同的匹配表格。
+if SR_choice == 1:
+    input_fn2_wb = excelapp.Workbooks.Open(input_fn2_c1)
+    formula_fn = formula_fn_c1
+else:
+    input_fn2_wb = excelapp.Workbooks.Open(input_fn2_c2)
+    formula_fn = formula_fn_c2
 
 # #对02文件夹中的文件都进行处理
 full_list = ["ATB", "TB", "GRIR"]
