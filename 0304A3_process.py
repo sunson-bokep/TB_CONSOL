@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2022/06/15 11:18:36
+@Last update:   2024/12/22 18:31:57
 @Author     :   bokep
-@Version    :   1.0.1
+@Version    :   1.0.3
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -112,6 +112,7 @@ excelapp.Visible = False
 
 root_route = getcwd()
 template_fn = root_route + "\\00框架文件\\04Formula-2.xlsx"
+input_fn1 = root_route + "\\00框架文件\\01Co&FX.xlsx"
 
 json_filename = "date_data.json"
 with open(json_filename, "r") as f:
@@ -120,6 +121,7 @@ month_mark = "Y" + dict_data["CY"] + "M" + dict_data["CM"]
 
 target_fn = root_route + "\\09完成文件\\CombinedTB#" + month_mark + ".xlsx"
 target_wb = excelapp.Workbooks.Open(target_fn)
+input_fn1_wb = excelapp.Workbooks.Open(input_fn1)
 
 # 导入筛选公式
 ws_formula_input(target_wb, template_fn, "#" + month_mark)
@@ -251,5 +253,6 @@ process_area.AutoFilter(Field=5)
 target_wb.Save()
 
 target_wb.Close()
+input_fn1_wb.Close()
 
 excelapp.Quit()
