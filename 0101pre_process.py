@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2023/04/07 16:12:26
+@Last update:   2025/01/07 10:05:49
 @Author     :   bokep
-@Version    :   1.2.0
+@Version    :   1.2.1
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -52,6 +52,25 @@ json_filename = "date_data.json"
 dict = {}
 dict["CY"] = month_mark_input[:2]
 dict["CM"] = month_mark_input[2:]
+
+# #对合并层级进行选择
+SR_choice = 9
+while True:
+    SR_choice = input("请输入合并层级：\n选1:欧华\n选2：本部\n")
+    # ##需要让程序识别输入的是数字格式
+    try:
+        SR_choice = int(SR_choice)
+    except Exception:
+        SR_choice = 9
+
+    if SR_choice == 1:
+        dict["Entity"] = "欧华"
+        break
+    elif SR_choice == 2:
+        dict["Entity"] = "本部"
+        break
+    else:
+        print("输入值非法！请输入1或者2！")
 
 with open(json_filename, "w") as f:
     # dict = json.dumps(dict, sort_keys=True, indent=4, separators=(',', ': '))

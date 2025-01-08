@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
 '''
-@Last update:   2022/06/27 13:39:49
+@Last update:   2025/01/07 10:12:00
 @Author     :   bokep
-@Version    :   1.0.0
+@Version    :   1.0.1
 @Contact    :   sunson89@gmail.com
 '''
 
@@ -135,6 +135,7 @@ json_filename = "date_data.json"
 with open(json_filename, "r") as f:
     dict_data = json.load(f)
 month_mark = "Y" + dict_data["CY"] + "M" + dict_data["CM"]
+entity_mark = dict_data["Entity"]
 
 target_fn = root_route + "\\09完成文件\\CombinedTB#" + month_mark + ".xlsx"
 
@@ -192,6 +193,7 @@ if input_ws.Cells(max_row_number, "F").value == "00 合并\\其他应付款\\关
 else:
     input_ws.Cells(max_row_number + 1, "E").value = "其他应付款"
     input_ws.Cells(max_row_number + 1, "F").value = "00 合并\\其他应付款\\关联方往来轧差"
+    input_ws.Cells(max_row_number + 1, "Q").value = entity_mark
     input_ws.Cells(max_row_number + 1, "N").formulaR1C1 = \
         "=-SUMIF(RPT!C1,CombinedTB!RC6,RPT!C12)"
     input_ws.Cells(max_row_number + 1, "P").formulaR1C1 = \
